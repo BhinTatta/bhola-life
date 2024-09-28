@@ -11,13 +11,15 @@
   "dependencies": {
     "@react-three/drei": "^9.114.0",
     "@react-three/fiber": "^8.17.8",
+    "@types/three": "^0.169.0",
     "framer-motion": "^11.7.0",
     "locomotive-scroll": "^4.1.4",
     "next": "14.2.13",
     "react": "^18",
     "react-dom": "^18",
     "saas": "^1.0.0",
-    "three": "^0.169.0"
+    "three": "^0.169.0",
+    "three-stdlib": "^2.33.0"
   },
   "devDependencies": {
     "@types/locomotive-scroll": "^4.1.3",

@@ -4,6 +4,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { motion } from "framer-motion";
 import FallingBackground from "./components/FallingBackground";
+import AnaglyphEffectComponent from "./components/BackGround3D/AnaglyphEffectComponent";
+import ModifiedMaterials from "./components/BackGround3D/TwoFace";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,6 +27,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <FallingBackground />
+        <ModifiedMaterials />
+        <AnaglyphEffectComponent />
         <motion.div
           animate={{
             x: [0, 20, -30, 0], // Moves left and right
