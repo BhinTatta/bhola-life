@@ -1,5 +1,4 @@
 "use client";
-"use client";
 import React, { useRef, useEffect, useState } from "react";
 import Script from "next/script";
 
@@ -11,6 +10,7 @@ declare global {
 }
 
 const TwoFaceComponent: React.FC = () => {
+  debugger;
   const mountRef = useRef<HTMLDivElement>(null);
   const [debug, setDebug] = useState<string[]>([]);
   const [scriptsLoaded, setScriptsLoaded] = useState({
@@ -62,7 +62,6 @@ const TwoFaceComponent: React.FC = () => {
         scene.add(cube);
         addDebug("Cube added to scene");
 
-        // Ensure GLTFLoader is available
         if (THREE.GLTFLoader) {
           const loader = new THREE.GLTFLoader();
           loader.load(
@@ -99,7 +98,6 @@ const TwoFaceComponent: React.FC = () => {
         mountRef.current?.appendChild(renderer.domElement);
         addDebug("Renderer created and added to DOM");
 
-        // Ensure OrbitControls is available
         if (THREE.OrbitControls) {
           const controls = new THREE.OrbitControls(camera, renderer.domElement);
           controls.minDistance = 10;
@@ -161,6 +159,10 @@ const TwoFaceComponent: React.FC = () => {
     };
 
     const render = () => {
+      if (!scene || !camera || !renderer) {
+        console.error("Scene, camera or renderer is not initialized.");
+        return;
+      }
       scene.traverse((child: any) => {
         if (child.isMesh) {
           const shader = child.material.userData.shader;
@@ -175,6 +177,29 @@ const TwoFaceComponent: React.FC = () => {
     init();
     animate();
     addDebug("Animation started");
+
+    // Cleanup function
+    return () => {
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      window.removeEventListener("resize", onWindowResize);
+
+      // Dispose of scene objects
+      scene.traverse((child: any) => {
+        if (child.isMesh) {
+          child.geometry.dispose();
+          if (child.material.isMaterial) {
+            child.material.dispose();
+          }
+        }
+      });
+
+      if (renderer) {
+        renderer.dispose();
+        mountRef.current?.removeChild(renderer.domElement);
+      }
+
+      addDebug("Scene cleaned up");
+    };
   };
 
   return (

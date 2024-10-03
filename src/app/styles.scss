@@ -1,0 +1,30 @@
+/* Hide scrollbar for WebKit browsers (Chrome, Safari, etc.) */
+::-webkit-scrollbar {
+  width: 0; /* Remove vertical scrollbar */
+  height: 0; /* Remove horizontal scrollbar */
+}
+
+/* For Firefox */
+html {
+  scrollbar-width: none; /* Firefox scrollbar hidden */
+}
+
+body {
+  overflow: -moz-scrollbars-none; /* Firefox-specific rule to hide scrollbar */
+}
+
+/* IE and Edge */
+body {
+  -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+}
+
+// styles/Home.module.scss
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  z-index: 100;
+}

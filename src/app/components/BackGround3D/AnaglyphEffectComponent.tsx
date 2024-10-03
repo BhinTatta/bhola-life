@@ -59,7 +59,7 @@ const AnaglyphEffectComponent: React.FC = () => {
       });
 
       // Create 500 sphere meshes
-      for (let i = 0; i < 500; i++) {
+      for (let i = 0; i < 50; i++) {
         const mesh = new THREE.Mesh(geometry, material);
         mesh.position.x = Math.random() * 10 - 5;
         mesh.position.y = Math.random() * 10 - 5;

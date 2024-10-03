@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import FallingBackground from "./components/FallingBackground";
 import AnaglyphEffectComponent from "./components/BackGround3D/AnaglyphEffectComponent";
 import TwoFaceComponent from "./components/BackGround3D/TwoFace";
+import BackgroundManager from "./components/background-manager/BackgroundManager";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -26,10 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <TwoFaceComponent />
-        <FallingBackground />
-
-        <AnaglyphEffectComponent />
+        <BackgroundManager />
         <motion.div
           animate={{
             x: [0, 20, -30, 0], // Moves left and right
@@ -38,7 +36,7 @@ export default function RootLayout({
             scale: [1, 1.05, 0.95, 1], // Slight zoom in and out
           }}
           transition={{
-            duration: 12, // Duration of one full loop
+            duration: 4, // Duration of one full loop
             repeat: Infinity, // Repeat the animation indefinitely
             ease: "easeInOut", // Smooth transition for all animations
           }}
