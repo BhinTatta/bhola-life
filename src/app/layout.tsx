@@ -5,7 +5,7 @@ import "./globals.css";
 import { motion } from "framer-motion";
 import FallingBackground from "./components/FallingBackground";
 import AnaglyphEffectComponent from "./components/BackGround3D/AnaglyphEffectComponent";
-import ModifiedMaterials from "./components/BackGround3D/TwoFace";
+import TwoFaceComponent from "./components/BackGround3D/TwoFace";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -26,8 +26,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <TwoFaceComponent />
         <FallingBackground />
-        <ModifiedMaterials />
+
         <AnaglyphEffectComponent />
         <motion.div
           animate={{

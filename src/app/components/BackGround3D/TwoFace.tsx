@@ -1,4 +1,5 @@
 "use client";
+"use client";
 import React, { useRef, useEffect, useState } from "react";
 import Script from "next/script";
 
@@ -9,7 +10,7 @@ declare global {
   }
 }
 
-const ModifiedMaterials: React.FC = () => {
+const TwoFaceComponent: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
   const [debug, setDebug] = useState<string[]>([]);
   const [scriptsLoaded, setScriptsLoaded] = useState({
@@ -31,11 +32,11 @@ const ModifiedMaterials: React.FC = () => {
   }, [scriptsLoaded]);
 
   const initScene = () => {
-    if (!mountRef.current) return;
+    if (!mountRef.current || !window.THREE) return;
     addDebug("Initializing scene");
 
-    const THREE = window.THREE;
-    const Stats = window.Stats;
+    const { THREE } = window;
+    const { Stats } = window;
 
     let camera: any, scene: any, renderer: any, stats: any;
     let animationFrameId: number;
@@ -61,31 +62,36 @@ const ModifiedMaterials: React.FC = () => {
         scene.add(cube);
         addDebug("Cube added to scene");
 
-        const loader = new THREE.GLTFLoader();
-        loader.load(
-          "/glb-models/LeePerrySmith.glb",
-          (gltf: any) => {
-            addDebug("GLTF model loaded successfully");
-            const geometry = gltf.scene.children[0].geometry;
+        // Ensure GLTFLoader is available
+        if (THREE.GLTFLoader) {
+          const loader = new THREE.GLTFLoader();
+          loader.load(
+            "/glb-models/LeePerrySmith.glb",
+            (gltf: any) => {
+              addDebug("GLTF model loaded successfully");
+              const geometry = gltf.scene.children[0].geometry;
 
-            let mesh = new THREE.Mesh(geometry, buildTwistMaterial(2.0));
-            mesh.position.x = -3.5;
-            mesh.position.y = -0.5;
-            scene.add(mesh);
+              let mesh = new THREE.Mesh(geometry, buildTwistMaterial(2.0));
+              mesh.position.x = -3.5;
+              mesh.position.y = -0.5;
+              scene.add(mesh);
 
-            mesh = new THREE.Mesh(geometry, buildTwistMaterial(-2.0));
-            mesh.position.x = 3.5;
-            mesh.position.y = -0.5;
-            scene.add(mesh);
-            addDebug("GLTF meshes added to scene");
-          },
-          (xhr: any) => {
-            addDebug(`GLTF ${(xhr.loaded / xhr.total) * 100}% loaded`);
-          },
-          (error: any) => {
-            addDebug(`Error loading GLTF: ${error.message}`);
-          }
-        );
+              mesh = new THREE.Mesh(geometry, buildTwistMaterial(-2.0));
+              mesh.position.x = 3.5;
+              mesh.position.y = -0.5;
+              scene.add(mesh);
+              addDebug("GLTF meshes added to scene");
+            },
+            (xhr: any) => {
+              addDebug(`GLTF ${(xhr.loaded / xhr.total) * 100}% loaded`);
+            },
+            (error: any) => {
+              addDebug(`Error loading GLTF: ${error.message}`);
+            }
+          );
+        } else {
+          addDebug("GLTFLoader not available");
+        }
 
         renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setPixelRatio(window.devicePixelRatio);
@@ -93,11 +99,16 @@ const ModifiedMaterials: React.FC = () => {
         mountRef.current?.appendChild(renderer.domElement);
         addDebug("Renderer created and added to DOM");
 
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.minDistance = 10;
-        controls.maxDistance = 50;
-        controls.enableZoom = false; // Disable zooming
-        addDebug("OrbitControls initialized");
+        // Ensure OrbitControls is available
+        if (THREE.OrbitControls) {
+          const controls = new THREE.OrbitControls(camera, renderer.domElement);
+          controls.minDistance = 10;
+          controls.maxDistance = 50;
+          controls.enableZoom = false;
+          addDebug("OrbitControls initialized");
+        } else {
+          addDebug("OrbitControls not available");
+        }
 
         if (typeof Stats === "function") {
           stats = new Stats();
@@ -200,4 +211,4 @@ const ModifiedMaterials: React.FC = () => {
   );
 };
 
-export default ModifiedMaterials;
+export default TwoFaceComponent;
